@@ -24,15 +24,18 @@ jobs:
         run: dotnet publish -c Release -o ./publish
 
       - name: Deploy to Windows Server
-        uses: appleboy/ssh-action@v0.1.10
+      - name: Deploy via WinRM
+        uses: microsoft/PS-Remote@v1
         with:
-          host: 3.0.98.56
-          username: administrator
-          password: 4(UhU(%Jj80mcxI?Idc4NG$MOuwqTfgu
- 
-          script: |
-             powershell -Command "& {
-             if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
+            host: 3.0.98.56
+            username: administrator
+            password: 4(UhU(%Jj80mcxI?Idc4NG$MOuwqTfgu
+            script: |
+              powershell -Command "& {
+                if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
+                Copy-Item -Path ./publish/* -Destination C:\Dotnet-app -Force
+                }"
+
              Remove-Item -Recurse -Force 'C:\Dotnet-app\*'
              }"
              scp -r ./publish/* administrator@3.0.98.56:C:\Dotnet-app
