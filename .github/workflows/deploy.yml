@@ -1,0 +1,41 @@
+name: Build and Deploy .NET App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0'
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Application
+        run: dotnet publish -c Release -o ./publish
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - name: Enable RDP
+        uses: gbraad-actions/enable-remote-desktop@v1
+        with:
+          host: 3.0.98.56
+          username: administrator
+          password: 4(UhU(%Jj80mcxI?Idc4NG$MOuwqTfgu
+          script: |
+           powershell -Command "& {
+                if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
+                Copy-Item -Path 'C:\Users\Administrator\publish\*' -Destination 'C:\Dotnet-app' -Force
+                }"
+
