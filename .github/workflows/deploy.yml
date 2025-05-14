@@ -32,4 +32,4 @@ jobs:
           script: |
             mkdir -p C:\Dotnet-app
             rm -r C:\Dotnet-app/*
-            scp -r ./publish/* ${{ secrets.WINDOWS_SERVER_USER }}@${{ secrets.WINDOWS_SERVER_IP }}:C:\Dotnet-app
+            scp -r ./publish/* administrator@3.0.98.56:C:\Dotnet-app
