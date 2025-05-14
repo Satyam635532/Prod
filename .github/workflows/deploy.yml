@@ -34,6 +34,8 @@ jobs:
           username: administrator
           password: 4(UhU(%Jj80mcxI?Idc4NG$MOuwqTfgu
           script: |
-            if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
-            Remove-Item -Recurse -Force 'C:\Dotnet-app\*'
-            Copy-Item -Path ./publish/* -Destination C:\Dotnet-app -Force
+           powershell -Command "& {
+                if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
+                Copy-Item -Path 'C:\Users\Administrator\publish\*' -Destination 'C:\Dotnet-app' -Force
+                }"
+
