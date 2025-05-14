@@ -23,19 +23,17 @@ jobs:
       - name: Build Application
         run: dotnet publish -c Release -o ./publish
 
-      - name: Deploy to Windows Server
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    steps:
       - name: Deploy via WinRM
         uses: microsoft/PS-Remote@v1
         with:
-            host: 3.0.98.56
-            username: administrator
-            password: 4(UhU(%Jj80mcxI?Idc4NG$MOuwqTfgu
-            script: |
-              powershell -Command "& {
-                if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
-                Copy-Item -Path ./publish/* -Destination C:\Dotnet-app -Force
-                }"
-
-             Remove-Item -Recurse -Force 'C:\Dotnet-app\*'
-             }"
-             scp -r ./publish/* administrator@3.0.98.56:C:\Dotnet-app
+          host: 3.0.98.56
+          username: administrator
+          password: 4(UhU(%Jj80mcxI?Idc4NG$MOuwqTfgu
+          script: |
+            if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
+            Remove-Item -Recurse -Force 'C:\Dotnet-app\*'
+            Copy-Item -Path ./publish/* -Destination C:\Dotnet-app -Force
