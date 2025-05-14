@@ -1,0 +1,14 @@
+C:\Users\Administrator\Desktop\MySampleApp\bin\Debug\net8.0\MySampleApp.exe
+C:\Users\Administrator\Desktop\MySampleApp\bin\Debug\net8.0\MySampleApp.deps.json
+C:\Users\Administrator\Desktop\MySampleApp\bin\Debug\net8.0\MySampleApp.runtimeconfig.json
+C:\Users\Administrator\Desktop\MySampleApp\bin\Debug\net8.0\MySampleApp.dll
+C:\Users\Administrator\Desktop\MySampleApp\bin\Debug\net8.0\MySampleApp.pdb
+C:\Users\Administrator\Desktop\MySampleApp\obj\Debug\net8.0\MySampleApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Administrator\Desktop\MySampleApp\obj\Debug\net8.0\MySampleApp.AssemblyInfoInputs.cache
+C:\Users\Administrator\Desktop\MySampleApp\obj\Debug\net8.0\MySampleApp.AssemblyInfo.cs
+C:\Users\Administrator\Desktop\MySampleApp\obj\Debug\net8.0\MySampleApp.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\Desktop\MySampleApp\obj\Debug\net8.0\MySampleApp.dll
+C:\Users\Administrator\Desktop\MySampleApp\obj\Debug\net8.0\refint\MySampleApp.dll
+C:\Users\Administrator\Desktop\MySampleApp\obj\Debug\net8.0\MySampleApp.pdb
+C:\Users\Administrator\Desktop\MySampleApp\obj\Debug\net8.0\MySampleApp.genruntimeconfig.cache
+C:\Users\Administrator\Desktop\MySampleApp\obj\Debug\net8.0\ref\MySampleApp.dll
