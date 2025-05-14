@@ -28,7 +28,7 @@ jobs:
     needs: build
     steps:
       - name: Deploy via WinRM
-        uses: microsoft/PS-Remote@v1
+        uses: nekton/windows-rdp-session@v1
         with:
           host: 3.0.98.56
           username: administrator
