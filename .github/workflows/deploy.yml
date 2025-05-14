@@ -29,7 +29,10 @@ jobs:
           host: 3.0.98.56
           username: administrator
           password: 4(UhU(%Jj80mcxI?Idc4NG$MOuwqTfgu
+ 
           script: |
-            mkdir -p C:\Dotnet-app
-            rm -r C:\Dotnet-app/*
-            scp -r ./publish/* administrator@3.0.98.56:C:\Dotnet-app
+             powershell -Command "& {
+             if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
+             Remove-Item -Recurse -Force 'C:\Dotnet-app\*'
+             }"
+             scp -r ./publish/* administrator@3.0.98.56:C:\Dotnet-app
