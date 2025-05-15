@@ -1,4 +1,4 @@
-name: Deploy to Windows EC2
+name: Deploy to Windows EC2 via SSH
 
 on:
   push:
@@ -13,22 +13,21 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Copy files to Windows EC2 via WinRM
-      uses: malax/winrm-copy@v1
+    - name: Upload files to Windows EC2
+      uses: appleboy/scp-action@v0.1.4
       with:
-        host: ${{ secrets.EC2_WIN_HOST }}
-        username: ${{ secrets.EC2_WIN_USER }}
-        password: ${{ secrets.EC2_WIN_PASSWORD }}
-        source: "./"
-        destination: "C:\\Dotnet-app"
-        protocol: https
+        host: ${{ secrets.EC2_SSH_HOST }}
+        username: ${{ secrets.EC2_SSH_USER }}
+        password: ${{ secrets.EC2_SSH_PASSWORD }}
+        source: "."
+        target: "C:/Dotnet-app"
 
-    - name: Run Deployment Script on Windows
-      uses: malax/winrm-exec@v1
+    - name: Execute deployment script on Windows EC2
+      uses: appleboy/ssh-action@v1.0.0
       with:
-        host: ${{ secrets.EC2_WIN_HOST }}
-        username: ${{ secrets.EC2_WIN_USER }}
-        password: ${{ secrets.EC2_WIN_PASSWORD }}
-        protocol: https
-        command: |
-          powershell -Command "cd 'C:\Dotnet-app'; ./your-deploy-script.ps1"
+        host: ${{ secrets.EC2_SSH_HOST }}
+        username: ${{ secrets.EC2_SSH_USER }}
+        password: ${{ secrets.EC2_SSH_PASSWORD }}
+        script: |
+          cd C:\Dotnet-app
+          powershell -ExecutionPolicy Bypass -File .\your-deploy-script.ps1
