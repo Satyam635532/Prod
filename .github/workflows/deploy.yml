@@ -23,29 +23,22 @@ jobs:
       - name: Build Application
         run: dotnet publish -c Release -o ./publish
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: dotnet-app
-          path: ./publish
-
   deploy:
     runs-on: windows-latest
     needs: build
     steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: dotnet-app
-
       - name: Enable RDP
         uses: gbraad-actions/enable-remote-desktop@v1
         with:
           host: 3.0.98.56
           username: administrator
-          password: 4(UhU(%Jj80mcxI?Idc4NG$MOuwqTfgu
-          script: |
-            powershell -Command "& {
-                if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
-                Copy-Item -Path '$(System.DefaultWorkingDirectory)\dotnet-app\*' -Destination 'C:\Dotnet-app' -Force
-            }"
+          password: ${{ secrets.EC2_PASSWORD }} # Use a secret for sensitive data
+
+      - name: Copy Files to EC2 Instance
+        run: |
+          $session = New-PSSession -ComputerName 3.0.98.56 -Credential (New-Object System.Management.Automation.PSCredential("administrator", (ConvertTo-SecureString "${{ secrets.EC2_PASSWORD }}" -AsPlainText -Force))) -Authentication Negotiate
+          Invoke-Command -Session $session -ScriptBlock {
+              if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
+              Copy-Item -Path '$(System.DefaultWorkingDirectory)\publish\*' -Destination 'C:\Dotnet-app' -Force
+          }
+          Remove-PSSession -Session $session
