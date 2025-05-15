@@ -36,21 +36,29 @@ jobs:
 
       - name: Configure WinRM
         run: |
+          # Clear existing TrustedHosts
+          Set-Item WSMan:\localhost\Client\TrustedHosts -Value ""
+          
           # Set TrustedHosts to allow connection
-          Set-Item WSMan:\localhost\Client\TrustedHosts -Value "18.141.196.254" -Concatenate -Force
+          Set-Item WSMan:\localhost\Client\TrustedHosts -Value "18.141.196.254"
           
           # Enable WinRM if not already enabled
           winrm quickconfig -force
-
+          
           # Allow WinRM traffic through the firewall
           New-NetFirewallRule -Name "WinRM HTTP" -DisplayName "WinRM HTTP" -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 5985
           New-NetFirewallRule -Name "WinRM HTTPS" -DisplayName "WinRM HTTPS" -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 5986
 
       - name: Copy Files to EC2 Instance
         run: |
-          $session = New-PSSession -ComputerName 18.141.196.254 -Credential (New-Object System.Management.Automation.PSCredential("administrator", (ConvertTo-SecureString "${{ secrets.EC2_PASSWORD }}" -AsPlainText -Force))) -Authentication Negotiate
-          Invoke-Command -Session $session -ScriptBlock {
-              if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
-              Copy-Item -Path '$(System.DefaultWorkingDirectory)\publish\*' -Destination 'C:\Dotnet-app' -Force
+          try {
+              $session = New-PSSession -ComputerName 18.141.196.254 -Credential (New-Object System.Management.Automation.PSCredential("administrator", (ConvertTo-SecureString "${{ secrets.EC2_PASSWORD }}" -AsPlainText -Force))) -Authentication Negotiate
+              Invoke-Command -Session $session -ScriptBlock {
+                  if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
+                  Copy-Item -Path '$(System.DefaultWorkingDirectory)\publish\*' -Destination 'C:\Dotnet-app' -Force
+              }
+          } catch {
+              Write-Error "An error occurred: $_"
+          } finally {
+              Remove-PSSession -Session $session
           }
-          Remove-PSSession -Session $session
