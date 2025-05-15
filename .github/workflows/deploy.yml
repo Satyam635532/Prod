@@ -23,10 +23,21 @@ jobs:
       - name: Build Application
         run: dotnet publish -c Release -o ./publish
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dotnet-app
+          path: ./publish
+
   deploy:
     runs-on: windows-latest
     needs: build
     steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dotnet-app
+
       - name: Enable RDP
         uses: gbraad-actions/enable-remote-desktop@v1
         with:
@@ -34,8 +45,7 @@ jobs:
           username: administrator
           password: 4(UhU(%Jj80mcxI?Idc4NG$MOuwqTfgu
           script: |
-           powershell -Command "& {
+            powershell -Command "& {
                 if (!(Test-Path 'C:\Dotnet-app')) { New-Item -Path 'C:\Dotnet-app' -ItemType Directory }
-                Copy-Item -Path 'C:\Users\Administrator\publish\*' -Destination 'C:\Dotnet-app' -Force
-                }"
-
+                Copy-Item -Path '$(System.DefaultWorkingDirectory)\dotnet-app\*' -Destination 'C:\Dotnet-app' -Force
+            }"
