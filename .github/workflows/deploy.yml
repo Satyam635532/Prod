@@ -20,7 +20,7 @@ jobs:
         username: ${{ secrets.EC2_WIN_USER }}
         password: ${{ secrets.EC2_WIN_PASSWORD }}
         source: "./"
-        destination: "C:\Dotnet-app"
+        destination: "C:\\Dotnet-app"
         protocol: https
 
     - name: Run Deployment Script on Windows
@@ -31,4 +31,4 @@ jobs:
         password: ${{ secrets.EC2_WIN_PASSWORD }}
         protocol: https
         command: |
-          powershell -Command "cd 'C:\'; ./your-deploy-script.ps1"
+          powershell -Command "cd 'C:\Dotnet-app'; ./your-deploy-script.ps1"
