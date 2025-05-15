@@ -30,7 +30,7 @@ jobs:
       - name: Enable RDP
         uses: gbraad-actions/enable-remote-desktop@v1
         with:
-          host: 3.0.98.56
+          host: 18.141.196.254
           username: administrator
           password: ${{ secrets.EC2_PASSWORD }}
 
